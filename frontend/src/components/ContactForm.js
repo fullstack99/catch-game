@@ -2,7 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
-const ContactForm = ({ label, onClose, onSubmit }) => {
+const ContactForm = ({ onClose, onSubmit }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")

@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
-import { eventLeaderboard, GAME_HEIGHT, GAME_WIDTH, TIME_OUT } from "../utility";
+import { GAME_HEIGHT, GAME_WIDTH, TIME_OUT } from "../constants";
+import { sendEndGame } from "./event";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -136,6 +137,6 @@ export default class GameScene extends Phaser.Scene {
 
   endGame() {
     this.scene.pause();
-    eventLeaderboard.emit("endGame", { score: this.score });
+    sendEndGame(this.score);
   }
 }

@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
-import GameScene from "./GameScene";
-import { eventLeaderboard, GAME_WIDTH, GAME_HEIGHT } from "../utility";
-
+import { GAME_WIDTH, GAME_HEIGHT } from "../constants";
 import { Context as GameContext } from "../context/GameContext";
 import ContactForm from "../components/ContactForm";
+import GameScene from "../service/GameScene";
+import { useSubscribeToEvent } from "../service/event";
 
 export default function Game() {
   const navigate = useNavigate();
@@ -14,14 +14,12 @@ export default function Game() {
   const { addScore } = useContext(GameContext);
   const [score, setScore] = useState(0);
 
-  useEffect(() => {
-    eventLeaderboard.on("endGame", (val) => {
-      setScore(val.score);
-      setIsOpenModal(true);
-    });
+  const handleEndGame = useCallback((val) => {
+    setScore(val.score);
+    setIsOpenModal(true);
+  }, []);
 
-    return () => eventLeaderboard.off("endGame");
-  }, [navigate]);
+  useSubscribeToEvent('endGame', handleEndGame);
 
   useEffect(() => {
     const config = {
